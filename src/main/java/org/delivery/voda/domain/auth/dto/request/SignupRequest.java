@@ -1,12 +1,13 @@
-package org.delivery.voda.domain.user.dto.request;
+package org.delivery.voda.domain.auth.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LoginRequest {
+public class SignupRequest {
   private String email;
   private String password;
-
+  private String nickname;
+  private String birthDate;
 }
