@@ -1,6 +1,7 @@
 package org.delivery.voda.domain.user.config;
 
 import lombok.RequiredArgsConstructor;
+import org.delivery.voda.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,11 +9,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final JwtAuthenticationFilter authenticationFilter;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -26,6 +30,7 @@ public class SecurityConfig {
         .requestMatchers("/", "/error", "/api/v1/auth/**").permitAll()
         .requestMatchers("/static/**", "/images/**").permitAll()
         .requestMatchers("/admin/**").hasRole("ADMIN")
+        //.requestMatchers("/api/v1/diaries/**").authenticated()
         .anyRequest().authenticated()
     );
 
@@ -37,6 +42,9 @@ public class SecurityConfig {
     http.formLogin((auth) -> auth.disable());
 
     http.httpBasic((auth) -> auth.disable());
+
+    http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
     return http.build();
   }

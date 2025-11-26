@@ -1,4 +1,6 @@
 spring:
+    profiles:
+        active: local
     jpa:
         show-sql: true
         properties:
@@ -11,6 +13,20 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         password: root
+
+    # ✅ [추가] AWS 설정 (로컬 실행 시 에러 방지용)
+    cloud:
+        aws:
+            region:
+                static: ap-northeast-2  # (필수) 서울 리전
+            stack:
+                auto: false             # (필수) CloudFormation 자동 조회 방지 (이거 없으면 부팅 느려짐)
+            credentials:
+                access-key: dummy-access-key  # 로컬이라 가짜 값이어도 됨
+                secret-key: dummy-secret-key  # 로컬이라 가짜 값이어도 됨
+            s3:
+                bucket: dummy-bucket    # 버킷 이름도 임시로 넣어둠
+
 jwt:
     secret: VodaProjectSecretKeyForJwtTokenGenerationMakeItLongerThan256BitsPlease
-    expiration: 86400000 # 1? (??? ??: 24 * 60 * 60 * 1000)
+    expiration: 86400000
