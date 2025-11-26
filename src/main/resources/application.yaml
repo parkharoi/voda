@@ -13,8 +13,11 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         password: root
+    data:
+        redis:
+            host: localhost  # "내 컴퓨터"라는 뜻
+            port: 6379       # Redis 전용 "문 번호" (기본값)
 
-    # ✅ [추가] AWS 설정 (로컬 실행 시 에러 방지용)
     cloud:
         aws:
             region:

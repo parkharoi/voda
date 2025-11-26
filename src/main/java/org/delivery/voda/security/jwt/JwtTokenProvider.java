@@ -30,9 +30,9 @@ public class JwtTokenProvider {
                           @Value("${jwt.expiration}") long validityInMilliseconds,
                           @Lazy UserDetailsService userDetailsService)  {
     byte[] keyBytes = Decoders.BASE64URL.decode(secretkey);
-    this.key = Keys.hmacShaKeyFor(secretkey.getBytes());
-    this.validityInMilliseconds = validityInMilliseconds;
+    this.key = Keys.hmacShaKeyFor(keyBytes);
 
+    this.validityInMilliseconds = validityInMilliseconds;
     this.userDetailsService = userDetailsService;
   }
 
@@ -43,6 +43,19 @@ public class JwtTokenProvider {
     return Jwts.builder()
         .setSubject(email) //토큰의 주인(이메일)
         .claim("role", role) //사용자 권한 정보 담기
+        .setIssuedAt(now) //발행시간
+        .setExpiration(validity) //만료시간
+        .signWith(key, SignatureAlgorithm.HS256) //암호화 알고리즘
+        .compact();
+  }
+
+  public String createRefreshToken(String email) {
+    Date now = new Date();
+    //7일
+    Date validity = new Date(now.getTime() + 604800000);
+
+    return Jwts.builder()
+        .setSubject(email) //토큰의 주인(이메일)
         .setIssuedAt(now) //발행시간
         .setExpiration(validity) //만료시간
         .signWith(key, SignatureAlgorithm.HS256) //암호화 알고리즘

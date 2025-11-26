@@ -68,8 +68,6 @@ public class User implements UserDetails {
     return email;
   }
 
-  //Todo : 계정 상태 설정
-
   //계정 만료 안됨?
   @Override
   public boolean isAccountNonExpired() {
