@@ -23,8 +23,8 @@ public class DiaryService {
   private final UserRepository userRepository;
   private final ImageUploader imageUploader;
 
-  public DiaryResponse createDiary(Long userId,DiaryRequest request, MultipartFile file) {
-    User user = userRepository.findById(userId)
+  public DiaryResponse createDiary(String email,DiaryRequest request, MultipartFile file) {
+    User user = userRepository.findByEmail(email)
         .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
     String imgUrl = null;

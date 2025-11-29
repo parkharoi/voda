@@ -30,8 +30,8 @@ public class DiaryController {
       @AuthenticationPrincipal UserDetails userDetails
 
       ) {
-    Long userId = Long.parseLong(userDetails.getUsername());
-    DiaryResponse response = diaryService.createDiary(userId, request, file);
+    String email = userDetails.getUsername();
+    DiaryResponse response = diaryService.createDiary(email, request, file);
     return ResponseEntity.ok(ApiResponse.success(response));
   }
 
