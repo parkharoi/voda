@@ -36,6 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+### Local Upload Files ###
+/files/
+
 ### Secrets ###
 application.yaml
 src/main/resources/application.yaml
