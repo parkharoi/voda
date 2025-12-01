@@ -1,4 +1,4 @@
-package org.delivery.voda.domain.user.config;
+package org.delivery.voda.domain.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.delivery.voda.security.jwt.JwtAuthenticationFilter;
@@ -17,11 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
   private final JwtAuthenticationFilter authenticationFilter;
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+  private final PasswordConfig passwordConfig;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -12,7 +12,6 @@ import java.security.Key;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +27,7 @@ public class JwtTokenProvider {
 
   public JwtTokenProvider(@Value("${jwt.secret}") String secretkey,
                           @Value("${jwt.expiration}") long validityInMilliseconds,
-                          @Lazy UserDetailsService userDetailsService)  {
+                          UserDetailsService userDetailsService)  {
     byte[] keyBytes = Decoders.BASE64URL.decode(secretkey);
     this.key = Keys.hmacShaKeyFor(keyBytes);
 
@@ -37,6 +36,9 @@ public class JwtTokenProvider {
   }
 
   public String createToken(String email, String role) {
+    Claims claims = Jwts.claims().setSubject(email);
+    claims.put("role", role);
+
     Date now = new Date();
     Date validity = new Date(now.getTime() + validityInMilliseconds);
 

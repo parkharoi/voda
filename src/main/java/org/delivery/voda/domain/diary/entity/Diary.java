@@ -53,7 +53,7 @@ public class Diary {
 
   @Builder
   public Diary(User user,Mood mood, String title, String description,
-               LocalDate writtenDate, String imgUrl, DiaryType diaryTyoe){
+               LocalDate writtenDate, String imgUrl, DiaryType diaryType){
 
     this.user = user;
     this.mood = mood;
@@ -61,7 +61,7 @@ public class Diary {
     this.description = description;
     this.writtenDate = writtenDate;
     this.imgUrl = imgUrl;
-    this.diaryType = diaryTyoe;
+    this.diaryType = diaryType;
   }
 
 }

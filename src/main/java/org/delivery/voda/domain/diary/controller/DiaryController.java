@@ -1,17 +1,25 @@
 package org.delivery.voda.domain.diary.controller;
 
 import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.delivery.voda.domain.diary.dto.request.DiaryRequest;
 import org.delivery.voda.domain.diary.dto.response.DiaryResponse;
+import org.delivery.voda.domain.diary.dto.response.DiarySummaryResponse;
 import org.delivery.voda.domain.diary.service.DiaryService;
+import org.delivery.voda.domain.user.entity.User;
 import org.delivery.voda.global.common.ApiResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,9 +38,34 @@ public class DiaryController {
       @AuthenticationPrincipal UserDetails userDetails
 
       ) {
-    Long userId = Long.parseLong(userDetails.getUsername());
-    DiaryResponse response = diaryService.createDiary(userId, request, file);
+    String email = userDetails.getUsername();
+    DiaryResponse response = diaryService.createDiary(email, request, file);
     return ResponseEntity.ok(ApiResponse.success(response));
   }
 
+  //월별 조회
+  @GetMapping
+  public ResponseEntity<ApiResponse<List<DiarySummaryResponse>>> getMonthlyDiaries(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @RequestParam("year") int year,
+      @RequestParam("month") int month
+  ) {
+    String email = userDetails.getUsername();
+
+    List<DiarySummaryResponse> responses = diaryService.getMonthlyDiaries(email, year, month);
+    return ResponseEntity.ok(ApiResponse.success(responses));
+  }
+
+  //일별 상세 조회
+  @GetMapping("/{date}")
+  public ResponseEntity<ApiResponse<DiaryResponse>> getDiaryDetail(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+  ) {
+    String email = userDetails.getUsername();
+
+    DiaryResponse response = diaryService.getDiaryDetail(email, date);
+
+    return ResponseEntity.ok(ApiResponse.success(response));
+  }
 }
