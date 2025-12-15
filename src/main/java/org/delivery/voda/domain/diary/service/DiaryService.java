@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.delivery.voda.domain.chat.repository.ChatRepository;
+import org.delivery.voda.domain.chat.service.GeminiService;
 import org.delivery.voda.domain.diary.dto.request.DiaryRequest;
 import org.delivery.voda.domain.diary.dto.response.DiaryResponse;
 import org.delivery.voda.domain.diary.dto.response.DiarySummaryResponse;
@@ -27,6 +29,8 @@ public class DiaryService {
 
   private final DiaryRepository diaryRepository;
   private final UserRepository userRepository;
+  private final ChatRepository chatRepository;
+  private final GeminiService geminiService;
   private final ImageUploader imageUploader;
 
   public DiaryResponse createDiary(String email,DiaryRequest request, MultipartFile file) {
@@ -70,6 +74,7 @@ public class DiaryService {
         .map(DiarySummaryResponse::from)
         .collect(Collectors.toList());
   }
+
 
   // 일별 상세 조회 (해당 날짜 요청 시 전체 데이터)
   public DiaryResponse getDiaryDetail(String email, LocalDate date) {

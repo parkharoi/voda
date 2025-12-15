@@ -10,7 +10,8 @@ public enum Mood {
   PEACE("PEACE", "평온해요"),
   SAD("SAD", "슬퍼요"),
   ANXIETY("ANXIETY", "불안해요"),
-  EXCITED("EXCITED", "신나요");
+  EXCITED("EXCITED", "신나요"),
+  ANGRY("ANGRY", "화나요");;
 
   private final String key;
   private final String mood;

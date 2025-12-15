@@ -21,7 +21,6 @@ public class DiaryResponse {
   private String imgUrl;
   private LocalDate writtenDate;
   private Mood mood;
-  // 예: "행복해요" (프론트에서 바로 쓰기 편하게 같이 줌)
   private String moodLabel;
   private DiaryType diaryType;
 
