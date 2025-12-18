@@ -12,4 +12,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
   List<Diary> findAllByUserAndWrittenDateBetween(User user, LocalDate startDate, LocalDate endDate);
 
   Optional<Diary> findByUserAndWrittenDate(User user, LocalDate date);
+
+  boolean existsByUserAndWrittenDate(User user, LocalDate writtenDate);
 }

@@ -2,6 +2,7 @@ package org.delivery.voda.domain.chat.service;
 
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.delivery.voda.domain.chat.dto.request.ChatRequest;
@@ -40,6 +41,44 @@ public class GeminiService {
     }
   }
 
+
+  // 감정 분석 메서드
+  public String generateDiaryAndEmotion(List<String> chatHistory) {
+    try {
+      Client client = Client.builder().apiKey(apiKey).build();
+
+      //채팅 기록 전체 합치기
+      String conversationLog = String.join("\n", chatHistory);
+
+      String prompt = "너는 사용자의 하루 대화를 분석해서 일기를 대신 써주는 'AI 서기'야.\n" +
+          "아래 대화 기록을 바탕으로 다음 3가지 작업을 수행해줘.\n\n" +
+          "1. [일기 작성]: \n" +
+          "   - **반드시 '나'의 시점(1인칭)으로 작성해줘.** (예: '오늘 나는...', '친구랑 떡볶이를 먹었다.')\n" +
+          "   - 사용자가 직접 쓴 것처럼 자연스러운 구어체로 작성해.\n" +
+          "   - 분량은 3~5문장.\n\n" +
+          "2. [감정 선택]: 다음 6가지 중 오늘 기분을 가장 잘 나타내는 것 하나를 골라.\n" +
+          "   [보기: HAPPY, PEACE, SAD, ANXIETY, EXCITED, ANGRY]\n\n" +
+          "3. [제목 작성]: 일기 내용을 한눈에 볼 수 있는 짧고 임팩트 있는 제목을 지어줘. (10자 이내)\n\n" +
+          "응답 형식(반드시 지킬것):\n" +
+          "TITLE: {제목}\n" +
+          "MOOD: {감정키워드}\n" +
+          "DIARY: {일기내용}\n\n" +
+          "== 대화 기록 ==\n" +
+          conversationLog;
+
+      GenerateContentResponse response = client.models.generateContent(
+          "gemini-2.5-flash",
+          prompt,
+          null
+      );
+      return response.text();
+    }catch (Exception e) {
+      log.error("제미나이 일기 생성 중 에러 발생", e);
+      return "일기 생성에 실패했습니다.";
+    }
+  }
+
+
   // 캐릭터 설정 (프롬프트)
   private String getInstruction(int type) {
     switch (type) {
@@ -56,7 +95,7 @@ public class GeminiService {
         return "너는 논리적이고 까칠한 '현실주의자'야. 사용자의 고민에 대해 듣기 좋은 소리보다는 따끔한 현실적인 조언(팩트 폭력)을 해줘. " +
             "말투는 약간 냉소적이어야 해.";
       default:
-        return "너는 도움이 되는 AI 어시스턴트야.";
+        return "모든 대화는 길 필요 없어 짧게 한줄, 혹은 두 줄";
     }
   }
 }
