@@ -21,6 +21,7 @@ public enum ErrorCode {
 
   DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 일기를 찾을 수 없습니다."),
   DIARY_ALREADY_EXISTS(HttpStatus.CONFLICT, "해당 날짜에 이미 작성된 일기가 있습니다."),
+  CHAT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 채팅을 찾을 수 없습니다."),
 
   IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다."),
   INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 형식입니다.");
