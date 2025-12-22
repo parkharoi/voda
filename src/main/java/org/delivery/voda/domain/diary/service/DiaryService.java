@@ -87,6 +87,14 @@ public class DiaryService {
     saveAiDiary(user, result, today);
   }
 
+  @Transactional
+  public void createAiDiaryByEmail(String email) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+    createAiDiary(user);
+  }
+
   private List<String> getChatLogsForToday(User user, LocalDate today) {
     LocalDateTime startOfDay = today.atStartOfDay();
     LocalDateTime endOfDay = today.atTime(LocalTime.MAX);

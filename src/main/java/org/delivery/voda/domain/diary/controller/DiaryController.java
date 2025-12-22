@@ -68,4 +68,17 @@ public class DiaryController {
 
     return ResponseEntity.ok(ApiResponse.success(response));
   }
+
+
+  //ai요약 버튼 클릭 시
+  @PostMapping("/ai")
+  public ResponseEntity<ApiResponse<Void>> createDiary(
+      @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    String email = userDetails.getUsername();
+
+    diaryService.createAiDiaryByEmail(email);
+
+    return ResponseEntity.ok(ApiResponse.success());
+  }
 }
